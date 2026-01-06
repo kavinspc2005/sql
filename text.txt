@@ -1,0 +1,195 @@
+mysql> create database hospital1;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use hospital1;
+Database changed
+mysql> CREATE TABLE doctors ( 
+    ->     doctor_id INT PRIMARY KEY, 
+    ->     doctor_name VARCHAR(50), 
+    ->     specialization VARCHAR(50) 
+    -> ); 
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>  
+mysql> CREATE TABLE patients ( 
+    ->     patient_id INT PRIMARY KEY, 
+    ->     patient_name VARCHAR(50), 
+    ->     age INT 
+    -> ); 
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>  
+mysql> CREATE TABLE appointments ( 
+    ->     appointment_id INT PRIMARY KEY, 
+    ->     doctor_id INT, 
+    ->     patient_id INT, 
+    ->     appointment_date DATE, 
+    ->     FOREIGN KEY (doctor_id) REFERENCES 
+    -> doctors(doctor_id), 
+    ->     FOREIGN KEY (patient_id) REFERENCES 
+    -> patients(patient_id) 
+    -> ); 
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> insert into doctors values(1,"kamal","Cardiology");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into patients values (101,"ram",30);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into appointments values(1001,1,101,"2026-01-09");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from doctors;
++-----------+-------------+----------------+
+| doctor_id | doctor_name | specialization |
++-----------+-------------+----------------+
+|         1 | kamal       | Cardiology     |
++-----------+-------------+----------------+
+1 row in set (0.00 sec)
+
+mysql> select * from patients;
++------------+--------------+------+
+| patient_id | patient_name | age  |
++------------+--------------+------+
+|        101 | ram          |   30 |
++------------+--------------+------+
+1 row in set (0.00 sec)
+
+mysql> select * from appointments;
++----------------+-----------+------------+------------------+
+| appointment_id | doctor_id | patient_id | appointment_date |
++----------------+-----------+------------+------------------+
+|           1001 |         1 |        101 | 2026-01-09       |
++----------------+-----------+------------+------------------+
+1 row in set (0.00 sec)
+
+mysql> alter table patients add gender varchar(10);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from patients;
++------------+--------------+------+--------+
+| patient_id | patient_name | age  | gender |
++------------+--------------+------+--------+
+|        101 | ram          |   30 | NULL   |
++------------+--------------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> rename table doctors to hospital_doctors;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from doctors;
+ERROR 1146 (42S02): Table 'hospital1.doctors' doesn't exist
+mysql> select * from hospital_doctors;
++-----------+-------------+----------------+
+| doctor_id | doctor_name | specialization |
++-----------+-------------+----------------+
+|         1 | kamal       | Cardiology     |
++-----------+-------------+----------------+
+1 row in set (0.00 sec)
+
+mysql> update patients set age=30 where patient_id=101;
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> select * from patients;
++------------+--------------+------+--------+
+| patient_id | patient_name | age  | gender |
++------------+--------------+------+--------+
+|        101 | ram          |   30 | NULL   |
++------------+--------------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> update patients set gender=male where patient_id=101;
+ERROR 1054 (42S22): Unknown column 'male' in 'field list'
+mysql> update patients set gender='male' where patient_id=101;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from patients;
++------------+--------------+------+--------+
+| patient_id | patient_name | age  | gender |
++------------+--------------+------+--------+
+|        101 | ram          |   30 | male   |
++------------+--------------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> Terminal close -- exit!
+mysql> use hospital1;
+Database changed
+mysql> delete from appointements where appointement_id=1001;
+ERROR 1146 (42S02): Table 'hospital1.appointements' doesn't exist
+mysql> use hospital1;
+Database changed
+mysql> select * from patients;
++------------+--------------+------+--------+
+| patient_id | patient_name | age  | gender |
++------------+--------------+------+--------+
+|        101 | ram          |   30 | male   |
++------------+--------------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from appointments;
++----------------+-----------+------------+------------------+
+| appointment_id | doctor_id | patient_id | appointment_date |
++----------------+-----------+------------+------------------+
+|           1001 |         1 |        101 | 2026-01-09       |
++----------------+-----------+------------+------------------+
+1 row in set (0.00 sec)
+
+mysql> delete from appointements where appointement_id=1001;
+ERROR 1146 (42S02): Table 'hospital1.appointements' doesn't exist
+mysql> delete from appointements where appointement_id=1001;
+ERROR 1146 (42S02): Table 'hospital1.appointements' doesn't exist
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from patients;
++------------+--------------+------+--------+
+| patient_id | patient_name | age  | gender |
++------------+--------------+------+--------+
+|        101 | ram          |   30 | male   |
++------------+--------------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> savepoint to sp1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'to sp1' at line 1
+mysql> Terminal close -- exit!
+mysql> use hospital1;
+Database changed
+mysql> select * from patients;
++------------+--------------+------+--------+
+| patient_id | patient_name | age  | gender |
++------------+--------------+------+--------+
+|        101 | ram          |   30 | male   |
++------------+--------------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> savepoint sp1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from patients where patient_id=101;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`hospital1`.`appointments`, CONSTRAINT `appointments_ibfk_2` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`patient_id`))
+mysql> CREATE TABLE doctors ( 
+    ->     ->     doctor_id INT PRIMARY KEY, 
+    ->     ->     doctor_name VARCHAR(50), 
+    ->     ->     specialization VARCHAR(50) 
+    ->     -> 
+    ->  
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '->     doctor_id INT PRIMARY KEY, 
+    ->     doctor_name VARCHAR(50), 
+    ->  ' at line 2
+mysql> insert into doctors values(1,"kamal","Cardiology");
+ERROR 1146 (42S02): Table 'hospital1.doctors' doesn't exist
+mysql>  FOREIGN KEY (patient_id) REFERENCES 
+    ->     -> patients(patient_id) 
+    -> on delete cascade;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FOREIGN KEY (patient_id) REFERENCES 
+    -> patients(patient_id) 
+on delete casc' at line 1
+mysql> Terminal close -- exit!
