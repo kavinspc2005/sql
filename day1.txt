@@ -1,0 +1,181 @@
+mysql> show databases;
++---------------------+
+| Database            |
++---------------------+
+| bank                |
+| bank1               |
+| bankingsystem       |
+| college_db          |
+| database_name       |
+| dbone               |
+| dumy                |
+| hospital            |
+| hospital1           |
+| hospital2           |
+| information_schema  |
+| kavin               |
+| mca                 |
+| mca1                |
+| mysql               |
+| new                 |
+| new1                |
+| online_reservation  |
+| online_reservation1 |
+| performance_schema  |
+| personal_info_db    |
+| personal_info_db1   |
+| second2             |
+| student_db          |
+| student_db1         |
+| student_db3         |
+| sys                 |
++---------------------+
+27 rows in set (0.00 sec)
+
+mysql> use new;
+Database changed
+mysql> create table student_details(
+    -> student_id int(20),
+    -> name varchar(20)
+    -> department varchar(20),
+    -> marks int(10)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'department varchar(20),
+marks int(10)
+)' at line 4
+mysql> create table student_details(
+    -> student_id int(20),
+    -> name varchar(20),
+    -> department varchar(20),
+    -> marks int(10)
+    -> );
+Query OK, 0 rows affected, 2 warnings (0.04 sec)
+
+mysql> inser into student_details values(101,'dheena','MBA',97);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'inser into student_details values(101,'dheena','MBA',97)' at line 1
+mysql> insert into student_details values(101,'dheena','MBA',97);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_details values(102,'kavin','MCA',92);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_details values(103,'kalai','MCA',85);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_details values(104,'kamal','MBA',100);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select*from student details;
++------------+--------+------+---------+
+| registerno | name   | age  | pincode |
++------------+--------+------+---------+
+|         13 | Guru   |   18 |  641655 |
+|         10 | Karthi |   20 |  641685 |
+|         20 | Kavin  |   30 |  641695 |
+|         17 | Kamal  |   18 |  641625 |
+|         13 | Guru   |   18 |  641655 |
+|         17 | Kamal  |   18 |  641625 |
++------------+--------+------+---------+
+6 rows in set (0.03 sec)
+
+mysql> select*from student details
+    -> where department='MCA';
+ERROR 1054 (42S22): Unknown column 'department' in 'where clause'
+mysql> select*from student details
+    -> where age=18;
++------------+-------+------+---------+
+| registerno | name  | age  | pincode |
++------------+-------+------+---------+
+|         13 | Guru  |   18 |  641655 |
+|         17 | Kamal |   18 |  641625 |
+|         13 | Guru  |   18 |  641655 |
+|         17 | Kamal |   18 |  641625 |
++------------+-------+------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select*from student details
+    -> where age>18;
++------------+--------+------+---------+
+| registerno | name   | age  | pincode |
++------------+--------+------+---------+
+|         10 | Karthi |   20 |  641685 |
+|         20 | Kavin  |   30 |  641695 |
++------------+--------+------+---------+
+2 rows in set (0.01 sec)
+
+mysql> select*from student details
+    -> where age between 18 and 30;
++------------+--------+------+---------+
+| registerno | name   | age  | pincode |
++------------+--------+------+---------+
+|         13 | Guru   |   18 |  641655 |
+|         10 | Karthi |   20 |  641685 |
+|         20 | Kavin  |   30 |  641695 |
+|         17 | Kamal  |   18 |  641625 |
+|         13 | Guru   |   18 |  641655 |
+|         17 | Kamal  |   18 |  641625 |
++------------+--------+------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select*from student details
+    -> where department in('MCA','MBA');
+ERROR 1054 (42S22): Unknown column 'department' in 'where clause'
+mysql> select*from student details
+    -> where age in('18,20);
+    '> select*from student details
+    '> where department in('MCA','MBA');
+    '>  select*from student details
+    '>     -> where department in('MCA','MBA');
+    '>     -> where department in('MCA','MBA');
+    '> 
+    '> 
+    '> 
+    '> inser into student_details values(101,'dheena','MBA',97);
+    '> ^C
+mysql> select*from student details
+    -> where name like 'A%';
+Empty set (0.00 sec)
+
+mysql> select*from student details
+    -> where name like 'vin%';
+Empty set (0.00 sec)
+
+mysql> select*from student details
+    -> where name like 'ka%';
++------------+--------+------+---------+
+| registerno | name   | age  | pincode |
++------------+--------+------+---------+
+|         10 | Karthi |   20 |  641685 |
+|         20 | Kavin  |   30 |  641695 |
+|         17 | Kamal  |   18 |  641625 |
+|         17 | Kamal  |   18 |  641625 |
++------------+--------+------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select*from student details
+    -> where name like 'esh%';
+Empty set (0.00 sec)
+
+mysql> select*from student details
+    -> where name like '%_______%';
+Empty set (0.00 sec)
+
+mysql> select*from student details
+    -> where name like 'k____n';
+Empty set (0.00 sec)
+
+mysql> select*from student details
+    -> order by age DESC;
++------------+--------+------+---------+
+| registerno | name   | age  | pincode |
++------------+--------+------+---------+
+|         20 | Kavin  |   30 |  641695 |
+|         10 | Karthi |   20 |  641685 |
+|         13 | Guru   |   18 |  641655 |
+|         17 | Kamal  |   18 |  641625 |
+|         13 | Guru   |   18 |  641655 |
+|         17 | Kamal  |   18 |  641625 |
++------------+--------+------+---------+
+6 rows in set (0.00 sec)
+
+mysql> Terminal close -- exit!
