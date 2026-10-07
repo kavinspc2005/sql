@@ -1,1 +1,224 @@
+create database student_management_system;
 
+use student_management_system;
+
+create table students(
+student_id int primary key,
+name varchar(100),
+email varchar(100) unique,
+phone varchar(10),
+date_of_birth date,
+gender varchar(10),
+department_id int
+);
+
+create table departments (
+department_id int primary key,
+department_name varchar(100)
+);
+
+
+
+create table courses(
+course_id int primary key,
+course_name varchar(100),
+department_id int,
+teacher_id int
+);
+create table marks(
+marks_id int primary key,
+student_id int,
+course_id int,
+exam_id int,
+marks int
+);
+select*from students;
+insert into departments(department_id,department_name) values
+(1,'computer science'),
+(2,'Information technology'),
+(3,'Electronics'),
+(4,'Mechanical');
+
+select*from departments;
+
+
+create table teachers(
+teacher_id int primary key,
+teacher_name varchar(100),
+email varchar(100),
+phone varchar(15),
+department_id int
+);
+
+insert into teachers (teacher_id,teacher_name,email,phone,department_id)values
+(1,'Anil kumar','anil@gmail.com','3748939207',1),
+(2,'kalai','kalai@gmail.com','9856478297',2),
+(3,'ravi kumar','ravi@gmail.com','9856453797',3),
+(4,'sneha','sneha@gmail.com','9524906541',4);
+
+select*from teachers;
+
+
+INSERT INTO students
+(student_id, name, email, phone, date_of_birth, gender, department_id)
+VALUES
+(101, 'Kavin', 'kavin@gmail.com', '9876543210', '2002-05-10', 'Male', 1),
+(102, 'Arun', 'arun@gmail.com', '9876543211', '2001-08-15', 'Male', 2),
+(103, 'Priya', 'priya@gmail.com', '9876543212', '2002-01-20', 'Female', 1),
+(104, 'Divya', 'divya@gmail.com', '9876543213', '2001-12-05', 'Female', 3),
+(105, 'Rahul', 'rahul@gmail.com', '9876543214', '2002-06-25', 'Male', 4);
+
+select*from students;
+
+
+insert into courses (course_id,course_name,department_id,teacher_id)values
+(201,'Java programming', 1,1),
+(202,'Data base management',1,1),
+(203,'web development',2,2),
+(204,'Digital Electronics',3,3),
+(205,'Python',4,4);
+
+SELECT * FROM courses;
+
+create table  exams(
+exam_id int primary key,
+exam_name varchar(100),
+exam_date date
+);
+insert into exams(exam_id,exam_name,exam_date) values
+(301,'Internal assessment 1','2026-06-10'),
+(302,'Internal assessment 2','2026-07-15'),
+(303,'Semester Examination','2026-08-20');
+select*from exams;
+insert into marks(marks_id,student_id,course_id,exam_id,marks) values
+(1, 101, 201, 301, 85),
+(2, 101, 202, 301, 90),
+(3, 102, 203, 301, 78),
+(4, 103, 201, 301, 92),
+(5, 104, 204, 301, 88),
+(6, 105, 205, 301, 75);
+
+select*from marks;
+
+alter table  students add foreign key(department_id)references departments(department_id);
+
+alter table courses add foreign key(department_id)references departments(department_id);
+
+alter table marks add foreign key(student_id)references students(student_id);
+
+alter table marks add foreign key(course_id) references courses(course_id);
+
+
+alter table courses add foreign key(teacher_id)references teachers(teacher_id);
+
+alter table teachers add foreign key(department_id)references departments(department_id);
+
+alter table marks add foreign key(course_id)references courses(course_id);
+
+alter table marks add foreign key(exam_id)references exams(exam_id);
+
+
+select*from students;
+select*from departments;
+select*from teachers;
+select*from courses;
+select*from exams;
+select*from marks;
+
+
+select s.student_id,s.name,d.department_name from students s join departments d on s.department_id=d.department_id;
+
+select s.name as student_name,c.course_name,m.marks
+ from marks m join students s 
+ on m.student_id=s.student_id join courses c 
+ on m.course_id=c.course_id;
+ 
+ 
+ select 
+ s.name as student_name,
+ c.course_name,
+ t.teacher_name,
+ e.exam_name,
+ m.marks
+ from marks m join students s
+ on m.student_id=s.student_id
+ join courses c on m.course_id=c.course_id 
+ join departments d
+ on s.department_id=d.department_id
+ join teachers t
+ on c.teacher_id=t.teacher_id
+ join exams e 
+ on m.exam_id=e.exam_id;
+ 
+ select s.name as student_name,c.course_name,m.marks 
+ from marks m join students s on m.student_id=s.student_id 
+ join courses c on m.course_id=c.course_id where s.name='kavin';
+ 
+ select s.name as student_name,
+ c.course_name,
+ t.teacher_name,
+ e.exam_name,
+ m.marks
+ from marks m join students s on m.student_id=
+ s.student_id
+ join courses c on m.course_id=
+ c.course_id
+ join teachers t on c.teacher_id=
+ t.teacher_id
+ join exams e on m.exam_id=
+ e.exam_id;
+ 
+ select s.name as student_name,
+ avg(m.marks) as average_marks
+ from marks m
+ join students s
+ on m.student_id=s.student_id
+ group by s.name;
+ 
+ 
+ select s.name as student_name,
+ max(m.marks)as average_marks
+ from marks m
+ join students s 
+ on m.student_id=s.student_id
+ group by s.name;
+ 
+ 
+ select s.name as student_name,
+ min(m.marks)as lowest_marks
+ from marks m
+ join students s on 
+ m.student_id=s.student_id
+ group by s.name;
+ 
+ 
+SELECT 
+    d.department_name,
+    COUNT(s.student_id) AS total_students
+FROM students s
+JOIN departments d
+ON s.department_id = d.department_id
+GROUP BY d.department_name;
+ 
+ select s.name as student_name,
+ course_name,
+ m.marks
+ from marks m join students s on m.student_id=
+ s.student_id join courses c on m.course_id=
+ c.course_id order by m.marks DESC;
+ 
+ 
+ select s.name as student_name,
+ c.course_name,
+ m.marks
+ from marks m join students s on m.student_id=s.student_id 
+ join courses c on m.course_id= 
+ c.course_id where s.name='kavin';
+
+update marks set marks=95
+where mark_id=1;
+
+select*from marks;
+
+
+delete from marks where mark_id=6;
